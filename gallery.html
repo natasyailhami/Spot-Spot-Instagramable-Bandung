@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Galeri Spot Instagramable Bandung</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto:wght@400;700&display=swap">
+    <style>
+        /* ===== VARIABLES & BASE STYLES ===== */
+        :root {
+            --primary: #e94e1b;
+            --primary-hover: #ff5823;
+            --dark: #0a0a0a;
+            --dark-light: #121212;
+            --text: #eee;
+            --text-secondary: #666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--text);
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--primary);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: saturate(180%) blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            border-bottom: 1px solid var(--primary);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--primary);
+            letter-spacing: 1.5px;
+            user-select: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* ===== GALLERY DETAIL SECTION ===== */
+        .gallery-detail-section {
+            padding: 8rem 2rem 4rem; /* Adjusted padding to account for fixed navbar */
+            max-width: 1200px; /* Increased max-width for 3 columns */
+            margin: 0 auto;
+            text-align: center;
+            min-height: calc(100vh - 60px - 4rem); /* Adjust based on footer height */
+        }
+
+        .gallery-detail-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--primary);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .gallery-detail-section h2::after {
+            content: '';
+            display: block;
+            width: 120px;
+            height: 4px;
+            background: var(--primary);
+            margin: 1rem auto 0;
+        }
+        
+        /* Container for grid layout when all spots are shown */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 3 columns for desktop */
+            gap: 2.5rem; /* Gap between grid items */
+            margin-bottom: 3rem;
+            justify-content: center; /* Center items if they don't fill the row */
+        }
+
+        .spot-content {
+            background: var(--dark-light);
+            border-radius: 8px;
+            padding: 1.5rem; /* Reduced padding for grid items */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: left;
+            transition: all 0.4s ease; /* Transition for hover effect */
+            cursor: pointer; /* Indicate clickable */
+            overflow: hidden; /* Ensure image border-radius works */
+            display: flex; /* Flexbox for internal content alignment */
+            flex-direction: column; /* Stack image, title, description */
+            height: 100%; /* Make all cards same height in a row */
+        }
+        
+        /* Specific styling for when a single spot is displayed */
+        .gallery-detail-section.single-spot-view .spot-content {
+            max-width: 900px; /* Limit width for single view */
+            margin: 0 auto 3rem auto; /* Center single view */
+            padding: 2.5rem; /* Restore original padding for single view */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .spot-content:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(233, 78, 27, 0.3);
+        }
+
+        .spot-image {
+            width: 100%;
+            height: 220px; /* Consistent height for grid images */
+            background-size: cover;
+            background-position: center;
+            border-radius: 6px;
+            margin-bottom: 1rem; /* Reduced margin */
+            transition: transform 0.5s ease;
+        }
+
+        .spot-content:hover .spot-image {
+            transform: scale(1.05);
+        }
+
+        .spot-content h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem; /* Same as preview item title */
+            color: var(--primary);
+            margin-bottom: 0.8rem; /* Space after title */
+        }
+
+        /* Specific styling for when a single spot is displayed */
+        .gallery-detail-section.single-spot-view .spot-image {
+            height: 400px; /* Larger image for single view */
+            margin-bottom: 2rem;
+        }
+
+        .spot-description {
+            font-size: 1rem; /* Slightly smaller for grid view */
+            margin-bottom: 1rem;
+            color: var(--text);
+            flex-grow: 1; /* Make description take available space */
+        }
+        
+        /* Specific styling for when a single spot is displayed */
+        .gallery-detail-section.single-spot-view .spot-description {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .spot-address {
+            font-style: italic;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.9rem; /* Slightly smaller for grid view */
+        }
+        
+        /* Specific styling for when a single spot is displayed */
+        .gallery-detail-section.single-spot-view .spot-address {
+            font-size: 0.95rem;
+        }
+
+        .spot-map-link {
+            display: inline-block;
+            background: var(--primary);
+            color: #111;
+            padding: 0.8rem 1.8rem;
+            border-radius: 4px;
+            font-weight: 700;
+            transition: background 0.3s ease;
+            text-align: center; /* Center button text */
+            align-self: flex-start; /* Align button to start in flex column */
+        }
+
+        .spot-map-link:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Hidden class to control visibility */
+        .hidden {
+            display: none;
+        }
+
+        /* Default gallery content when no hash is present or invalid */
+        .default-gallery-message {
+            padding: 2.5rem;
+            background: var(--dark-light);
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            margin-top: 2rem; /* Add some space from title */
+        }
+
+        .default-gallery-message p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #111;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(233, 78, 27, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: var(--dark-light);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 992px) { /* Adjust for smaller desktops/large tablets */
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjust min-width for 3 columns */
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 1.5rem;
+            }
+            .nav-links {
+                gap: 1.2rem;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Maybe back to 2 columns on tablets */
+                gap: 1.5rem;
+            }
+            .spot-image {
+                height: 180px; /* Smaller image in grid view */
+            }
+            .spot-content {
+                padding: 1.2rem;
+            }
+            .gallery-detail-section.single-spot-view .spot-image {
+                height: 300px;
+            }
+            .gallery-detail-section.single-spot-view .spot-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+            }
+            .logo {
+                margin-bottom: 0.5rem;
+            }
+            .nav-links {
+                gap: 1rem;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr; /* Single column on mobile */
+            }
+            .spot-image {
+                height: 150px;
+            }
+            .spot-description {
+                font-size: 0.9rem;
+            }
+            .spot-map-link {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            .gallery-detail-section.single-spot-view .spot-image {
+                height: 200px;
+            }
+            .gallery-detail-section.single-spot-view .spot-description {
+                font-size: 1rem;
+            }
+            .gallery-detail-section.single-spot-view .spot-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">Bandung IG Spots</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="map.html">Map</a>
+            <a href="gallery.html">Gallery</a>
+            <a href="#">About</a>
+        </nav>
+    </header>
+
+    <section class="gallery-detail-section">
+        <h2 id="gallery-main-title">Galeri Spot Instagramable Bandung</h2>
+
+        <div id="gallery-grid-container" class="gallery-grid">
+            <div id="farmhouse-lembang" class="spot-content" onclick="location.href='gallery.html#farmhouse-lembang'">
+                <div class="spot-image" style="background-image: url('Asset/Farmhouse.png');"></div>
+                <h3>Farmhouse Lembang</h3>
+                <p class="spot-description">Suasana pedesaan Eropa dengan bangunan unik dan hewan ternak lucu. Ideal untuk foto tema peternakan atau dongeng.</p>
+                <p class="spot-address">Jl. Raya Lembang No.108, Lembang</p>
+                <a href="map.html?spot=farmhouse-lembang" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="kawah-putih" class="spot-content" onclick="location.href='gallery.html#kawah-putih'">
+                <div class="spot-image" style="background-image: url('Asset/Kawahputih.jpg');"></div>
+                <h3>Kawah Putih Ciwidey</h3>
+                <p class="spot-description">Danau vulkanik dengan air berwarna unik dan pemandangan pegunungan menakjubkan. Latar belakang dramatis untuk foto alam.</p>
+                <p class="spot-address">Sugihmukti, Pasirjambu, Ciwidey</p>
+                <a href="map.html?spot=kawah-putih" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="gedung-sate" class="spot-content" onclick="location.href='gallery.html#gedung-sate'">
+                <div class="spot-image" style="background-image: url('Asset/Gedungsate.jpg');"></div>
+                <h3>Gedung Sate</h3>
+                <p class="spot-description">Ikon Bandung dengan arsitektur kolonial megah. Spot favorit untuk foto arsitektur, terutama di pagi/sore hari.</p>
+                <p class="spot-address">Jl. Diponegoro No.22, Bandung Wetan</p>
+                <a href="map.html?spot=gedung-sate" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="dago-dream-park" class="spot-content" onclick="location.href='gallery.html#dago-dream-park'">
+                <div class="spot-image" style="background-image: url('Asset/Dagodreampark.jpeg');"></div>
+                <h3>Dago Dream Park</h3>
+                <p class="spot-description">Wahana dan spot foto unik seperti karpet terbang dan rumah terbalik, dengan latar hutan pinus yang asri.</p>
+                <p class="spot-address">Jl. Dago Giri Km. 2.2, Lembang</p>
+                <a href="map.html?spot=dago-dream-park" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="braga-street" class="spot-content" onclick="location.href='gallery.html#braga-street'">
+                <div class="spot-image" style="background-image: url('Asset/Braga.webp');"></div>
+                <h3>Jalan Braga</h3>
+                <p class="spot-description">Jalan bersejarah dengan bangunan art deco Eropa. Atmosfer klasik, artistik, dan retro untuk foto estetik.</p>
+                <p class="spot-address">Jl. Braga, Kec. Sumur Bandung</p>
+                <a href="map.html?spot=braga-street" class="spot-map-link">Lihat di Peta</a>
+            </div>
+            
+            <div id="orchid-forest-cikole" class="spot-content" onclick="location.href='gallery.html#orchid-forest-cikole'">
+                <div class="spot-image" style="background-image: url('Asset/Orchidforest.jpg');"></div>
+                <h3>Orchid Forest Cikole</h3>
+                <p class="spot-description">Taman anggrek terbesar di Indonesia dengan jembatan gantung bercahaya di tengah hutan pinus. Sangat indah di malam hari.</p>
+                <p class="spot-address">Genteng, Cikole, Lembang</p>
+                <a href="map.html?spot=orchid-forest-cikole" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+             <div id="floating-market-lembang" class="spot-content" onclick="location.href='gallery.html#floating-market-lembang'">
+                <div class="spot-image" style="background-image: url('Asset/Floatingmarket.jpg');"></div>
+                <h3>Floating Market Lembang</h3>
+                <p class="spot-description">Pasar terapung unik dengan perahu-perahu yang menjual makanan tradisional. Pemandangan danau yang menawan.</p>
+                <p class="spot-address">Jl. Grand Hotel No.33E, Lembang</p>
+                <a href="map.html?spot=floating-market-lembang" class="spot-map-link">Lihat di Peta</a>
+            </div>
+        
+            <div id="the-great-asia-africa" class="spot-content" onclick="location.href='gallery.html#the-great-asia-africa'">
+                <div class="spot-image" style="background-image: url('Asset/thegreatasiaafrica.jpg');"></div>
+                <h3>The Great Asia Africa</h3>
+                <p class="spot-description">Eksplorasi budaya dari 7 negara Asia dan Afrika dengan bangunan ikonik dan kostum tradisional untuk disewa.</p>
+                <p class="spot-address">Jl. Raya Lembang No.277, Lembang</p>
+                <a href="map.html?spot=the-great-asia-africa" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="ranca-upas" class="spot-content" onclick="location.href='gallery.html#ranca-upas'">
+                <div class="spot-image" style="background-image: url('Asset/rancaupas.jpg');"></div>
+                <h3>Ranca Upas</h3>
+                <p class="spot-description">Area perkemahan dengan padang rumput luas dan penangkaran rusa. Pemandangan kabut di pagi hari sangat fotogenik.</p>
+                <p class="spot-address">Jl. Raya Ciwidey - Patengan No.Km. 11, Rancabali</p>
+                <a href="map.html?spot=ranca-upas" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="lembang-park-zoo" class="spot-content" onclick="location.href='gallery.html#lembang-park-zoo'">
+                <div class="spot-image" style="background-image: url('Asset/lembangparkzoo.jpg');"></div>
+                <h3>Lembang Park & Zoo</h3>
+                <p class="spot-description">Kebun binatang modern dengan desain estetik, menawarkan interaksi dengan hewan dan spot foto yang menarik.</p>
+                <p class="spot-address">Jl. Sukarasa No.17, Lembang</p>
+                <a href="map.html?spot=lembang-park-zoo" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="curug-cimahi" class="spot-content" onclick="location.href='gallery.html#curug-cimahi'">
+                <div class="spot-image" style="background-image: url('Asset/curugcimahi.jpg');"></div>
+                <h3>Curug Cimahi (Pelangi)</h3>
+                <p class="spot-description">Air terjun yang indah, terutama saat malam hari dengan pencahayaan berwarna-warni yang menciptakan efek pelangi.</p>
+                <p class="spot-address">Jl. Kolonel Masturi No.325, Cisarua</p>
+                <a href="map.html?spot=curug-cimahi" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="bandung-zoo" class="spot-content" onclick="location.href='gallery.html#bandung-zoo'">
+                <div class="spot-image" style="background-image: url('Asset/kebunbinatangbandung.jpg');"></div>
+                <h3>Kebun Binatang Bandung</h3>
+                <p class="spot-description">Kebun binatang klasik dengan koleksi hewan dan area hijau yang luas, cocok untuk foto keluarga atau edukasi.</p>
+                <p class="spot-address">Jl. Kebun Binatang No.6, Lebak Siliwangi</p>
+                <a href="map.html?spot=bandung-zoo" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="taman-balai-kota-bandung" class="spot-content" onclick="location.href='gallery.html#taman-balai-kota-bandung'">
+                <div class="spot-image" style="background-image: url('Asset/tamanbalikota.jpg');"></div>
+                <h3>Taman Balai Kota Bandung</h3>
+                <p class="spot-description">Taman publik di depan Balai Kota dengan berbagai instalasi seni dan taman bunga, cocok untuk foto santai.</p>
+                <p class="spot-address">Jl. Wastukencana No.2, Babakan Ciamis</p>
+                <a href="map.html?spot=taman-balai-kota-bandung" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="asia-afrika-street-art" class="spot-content" onclick="location.href='gallery.html#asia-afrika-street-art'">
+                <div class="spot-image" style="background-image: url('Asset/Asia_Afrika_Street_Art.jpg');"></div>
+                <h3>Street Art Asia Afrika</h3>
+                <p class="spot-description">Dinding-dinding di sepanjang jalan Asia Afrika yang dihiasi mural dan grafiti berwarna-warni, cocok untuk foto urban edgy.</p>
+                <p class="spot-address">Sepanjang Jl. Asia Afrika, Bandung</p>
+                <a href="map.html?spot=asia-afrika-street-art" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="punclut-bandung" class="spot-content" onclick="location.href='gallery.html#punclut-bandung'">
+                <div class="spot-image" style="background-image: url('Asset/Punclut.jpg');"></div>
+                <h3>Punclut Bandung</h3>
+                <p class="spot-description">Area perbukitan dengan banyak kafe dan restoran yang menawarkan pemandangan kota Bandung dari ketinggian, terutama indah di malam hari.</p>
+                <p class="spot-address">Jl. Punclut, Ciumbuleuit</p>
+                <a href="map.html?spot=punclut-bandung" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="ciater-hot-spring" class="spot-content" onclick="location.href='gallery.html#ciater-hot-spring'">
+                <div class="spot-image" style="background-image: url('Asset/Ciater_Hot_Spring.jpg');"></div>
+                <h3>Pemandian Air Panas Ciater</h3>
+                <p class="spot-description">Kolam-kolam air panas alami dengan latar pegunungan, cocok untuk relaksasi dan foto di suasana alami.</p>
+                <p class="spot-address">Jl. Raya Subang - Bandung, Ciater</p>
+                <a href="map.html?spot=ciater-hot-spring" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="bandung-lautan-api-monument" class="spot-content" onclick="location.href='gallery.html#bandung-lautan-api-monument'">
+                <div class="spot-image" style="background-image: url('Asset/Bandung_Lautan_Api.jpg');"></div>
+                <h3>Monumen Bandung Lautan Api</h3>
+                <p class="spot-description">Monumen bersejarah yang melambangkan perjuangan rakyat Bandung, menjadi latar belakang yang kuat dan monumental.</p>
+                <p class="spot-address">Jl. Lapangan Supratman, Citarum</p>
+                <a href="map.html?spot=bandung-lautan-api-monument" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="kyotoku-floating-resto" class="spot-content" onclick="location.href='gallery.html#kyotoku-floating-resto'">
+                <div class="spot-image" style="background-image: url('Asset/Kyotoku_Floating_Resto.jpg');"></div>
+                <h3>Kyotoku Floating Restaurant</h3>
+                <p class="spot-description">Restoran unik dengan konsep bangunan Jepang mengapung di atas kolam, menawarkan suasana eksotis untuk bersantap dan berfoto.</p>
+                <p class="spot-address">Jl. Baru Laksana No.79, Lembang</p>
+                <a href="map.html?spot=kyotoku-floating-resto" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="bukit-moko" class="spot-content" onclick="location.href='gallery.html#bukit-moko'">
+                <div class="spot-image" style="background-image: url('Asset/Bukit_Moko.jpg');"></div>
+                <h3>Bukit Moko</h3>
+                <p class="spot-description">Puncak dengan pemandangan kota Bandung yang spektakuler, terutama saat matahari terbit atau terbenam. Cocok untuk foto panorama.</p>
+                <p class="spot-address">Cimenyan, Kab. Bandung</p>
+                <a href="map.html?spot=bukit-moko" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="chinatown-bandung" class="spot-content" onclick="location.href='gallery.html#chinatown-bandung'">
+                <div class="spot-image" style="background-image: url('Asset/Chinatown_Bandung.jpg');"></div>
+                <h3>Chinatown Bandung</h3>
+                <p class="spot-description">Area pecinan yang instagramable dengan bangunan-bangunan berwarna-warni, mural, dan kuliner khas. Cocok untuk foto bertema oriental dan video jalan-jalan.</p>
+                <p class="spot-address">Jl. Kelenteng No.41, Ciroyom</p>
+                <a href="map.html?spot=chinatown-bandung" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="tahura-djuanda" class="spot-content" onclick="location.href='gallery.html#tahura-djuanda'">
+                <div class="spot-image" style="background-image: url('Asset/Tahura_Djuanda.jpg');"></div>
+                <h3>Taman Hutan Raya Ir. H. Djuanda (Tahura)</h3>
+                <p class="spot-description">Kawasan hutan lindung dengan gua Jepang, gua Belanda, air terjun, dan pepohonan pinus tinggi. Ideal untuk foto dan video bertema alam dan petualangan.</p>
+                <p class="spot-address">Komplek Tahura, Jl. Ir. H. Djuanda No.99, Dago</p>
+                <a href="map.html?spot=tahura-djuanda" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="sarae-hills" class="spot-content" onclick="location.href='gallery.html#sarae-hills'">
+                <div class="spot-image" style="background-image: url('Asset/Sarae_Hills.jpeg');"></div>
+                <h3>Sarae Hills (Wonderland / Magic Forest)</h3>
+                <p class="spot-description">Area wisata dengan konsep negeri dongeng yang menawarkan berbagai spot foto ikonik seperti jembatan kaca, kastil fantasi, dan patung-patung raksasa dengan pemandangan pegunungan yang menakjubkan.</p>
+                <p class="spot-address">Jl. Cibungur, Ciwangun, Kec. Parongpong, Kabupaten Bandung Barat</p>
+                <a href="map.html?spot=sarae-hills" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="glamping-lakeside-rancabali" class="spot-content" onclick="location.href='gallery.html#glamping-lakeside-rancabali'">
+                <div class="spot-image" style="background-image: url('Asset/Glamping_Lakeside_Rancabali.jpg');"></div>
+                <h3>Glamping Lakeside Rancabali</h3>
+                <p class="spot-description">Tempat glamping unik di tepi Situ Patenggang dengan pemandangan danau yang menawan dan kapal Pinisi raksasa. Sangat indah untuk foto dan video bertema alam dan relaksasi.</p>
+                <p class="spot-address">Situ Patengan KM. 39, Rancabali</p>
+                <a href="map.html?spot=glamping-lakeside-rancabali" class="spot-map-link">Lihat di Peta</a>
+            </div>
+
+            <div id="the-lodge-maribaya" class="spot-content" onclick="location.href='gallery.html#the-lodge-maribaya'">
+                <div class="spot-image" style="background-image: url('Asset/The_Lodge_Maribaya.jpg');"></div>
+                <h3>The Lodge Maribaya</h3>
+                <p class="spot-description">Destinasi wisata alam dengan beragam wahana dan spot foto unik seperti balon udara, ayunan langit, dan sepeda gantung, dikelilingi hutan pinus yang asri.</p>
+                <p class="spot-address">Jl. Maribaya No.149/252, Cibodas, Lembang</p>
+                <a href="map.html?spot=the-lodge-maribaya" class="spot-map-link">Lihat di Peta</a>
+            </div>
+            </div>
+
+
+        <div id="default-gallery-content" class="default-gallery-message hidden">
+            <p>Pilih salah satu spot di atas untuk melihat detail lebih lanjut, atau jelajahi semua spot Instagramable di Bandung!</p>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash.substring(1); // Get hash without '#'
+            const galleryMainTitle = document.getElementById('gallery-main-title');
+            const galleryGridContainer = document.getElementById('gallery-grid-container');
+            const defaultContent = document.getElementById('default-gallery-content');
+            const allSpots = document.querySelectorAll('.spot-content');
+
+            // --- Logika Penentuan Tampilan ---
+            // Secara default, selalu tampilkan semua spot dalam grid.
+            // Tampilan satu spot hanya akan aktif jika ada hash yang valid DAN BUKAN datang dari tombol "Kembali ke Galeri" dari map.html
+            // Karena tombol "Kembali ke Galeri" di map.html akan mengarah ke gallery.html TANPA hash,
+            // maka secara otomatis akan masuk ke blok 'else' di bawah ini, yang akan menampilkan semua spot.
+
+            // Reset tampilan default ke grid
+            galleryMainTitle.textContent = "Galeri Spot Instagramable Bandung";
+            galleryGridContainer.classList.add('gallery-grid'); // Pastikan kontainer menggunakan grid
+            document.querySelector('.gallery-detail-section').classList.remove('single-spot-view'); // Pastikan tidak ada gaya single view
+            allSpots.forEach(content => content.classList.remove('hidden')); // Tampilkan semua spot
+            defaultContent.classList.add('hidden'); // Sembunyikan pesan default
+
+            // Jika ada hash, coba tampilkan spot spesifik
+            if (hash) {
+                const targetSpot = document.getElementById(hash);
+                if (targetSpot) {
+                    // Update main title to the specific spot's name
+                    const spotName = targetSpot.querySelector('h3').textContent;
+                    galleryMainTitle.textContent = spotName
+                    
+                    // Sesuaikan styling untuk tampilan tunggal
+                    galleryGridContainer.classList.remove('gallery-grid');
+                    document.querySelector('.gallery-detail-section').classList.add('single-spot-view');
+                    defaultContent.classList.add('hidden');
+
+                    // Scroll ke spot spesifik
+                    setTimeout(() => {
+                        const navbarHeight = document.querySelector('.navbar').offsetHeight;
+                        const elementPosition = targetSpot.getBoundingClientRect().top + window.scrollY;
+                        window.scrollTo({
+                            top: elementPosition - navbarHeight - 20,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
+                } 
+                // Jika hash tidak valid, akan tetap menampilkan semua spot (karena sudah diatur di awal)
+            }
+            // Jika tidak ada hash, sudah diatur untuk menampilkan semua spot dalam grid di awal
+        });
+    </script>
+</body>
+</html>
